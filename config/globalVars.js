@@ -3,6 +3,7 @@
 
 module.exports = {
   db: 'mongodb://localhost/test',
+  db: 'mongodb://Twitch:Twitch@ds050189.mlab.com:50189/users',
   //db: 'MLabs databse goes here'
   secret: 'The power of (((them)))',
   ids: {
