@@ -82,6 +82,48 @@ passport.use(new facebookStrategy({
     }
 ));
 
+//git hub Strategy
+var gitHubStrategy = require('passport-github').Strategy;
+
+//configure it
+passport.use(new gitHubStrategy({
+      clientID: config.ids.github.clientID,
+      clientSecret: config.ids.github.clientSecret,
+      callbackURL: config.ids.github.callbackURL
+    }, function(accessToken, refreshToken, profile, cb) {
+      Account.findOne({ oauthID: profile.id}, function(err, user) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          if (!err && user !== null) {
+            cb(null, user);
+          }
+          else {
+            //create new user
+            user = new Account({
+              oauthID: profile.id,
+              username: profile.username,
+              created: Date.now()
+            });
+            user.save(function(err, user) {
+              if (err) {
+                console.log(err)
+              }
+              else {
+                cb(null, user);
+              }
+            });
+
+          }
+        }
+      });
+      /*Account.findOrCreate({ facebookId}, function(err,user) {
+        return cb(err, user);
+      });*/
+    }
+));
+
 //read and write the user to from the session
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());

@@ -72,4 +72,16 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
   res.redirect('/teams');
 });
 
+//github
+router.get('/github', passport.authenticate('github'));
+
+//get github/callbackURL
+router.get('/github/callback', passport.authenticate('github', {
+   failureRedirect: '/login',
+   failureMessage: 'Invalid Login'
+}), function(req,res,next) {
+  res.redirect('/teams');
+});
+
+
 module.exports = router;
